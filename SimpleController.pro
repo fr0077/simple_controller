@@ -25,12 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        ../magmeasure/dummy_actuator.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
         ../magmeasure/actuator.h \
+        ../magmeasure/thk_actuator.h \
         mainwindow.h
 
 FORMS += \
@@ -40,3 +40,5 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+INCLUDEPATH += /usr/local/Cellar/boost/1.69.0_2/include
