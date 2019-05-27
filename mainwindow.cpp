@@ -82,14 +82,8 @@ void MainWindow::on_button_servo_on_clicked()
 void MainWindow::on_button_write_clicked()
 {
     update();
-    actuator->getCurrentPosition(currentAxis);
-    Actuator::Actuator_Error_Type result = actuator->setSpeed(currentAxis, speed);
-    status->addItem(QString::fromStdString("setSpeed " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(result)));
 
-
-    usleep(500000);
-
-    result = actuator->setDistance(currentAxis, dist);
+    Actuator::Actuator_Error_Type result = actuator->setDistance(currentAxis, dist);
     status->addItem(QString::fromStdString("setDistance " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(result)));
     status->scrollToBottom();
 }
@@ -99,6 +93,7 @@ void MainWindow::on_button_move_clicked()
     update();
     Actuator::Actuator_Error_Type result =  actuator->move(currentAxis, currentDirection);
     status->addItem(QString::fromStdString("move " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(result)));
+
     status->scrollToBottom();
 }
 
@@ -116,4 +111,31 @@ void MainWindow::on_init_clicked()
     Actuator::Actuator_Error_Type result =  actuator->init(currentAxis);
     status->addItem(QString::fromStdString("init " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(result)));
     status->scrollToBottom();
+}
+
+void MainWindow::on_button_write_2_clicked()
+{
+    update();
+    Actuator::Actuator_Error_Type result = actuator->setSpeed(currentAxis, speed);
+    status->addItem(QString::fromStdString("setSpeed " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(result)));
+    status->scrollToBottom();
+}
+
+void MainWindow::on_get_pos_clicked()
+{
+    update();
+    Actuator::ActuatorResponse response = actuator->getCurrentPosition(currentAxis);
+
+    status->addItem(QString::fromStdString("getCurrentPosition " + Actuator::axis_toString(currentAxis) + " " + Actuator::error_toString(response.errType)));
+    status->scrollToBottom();
+    if(response.errType != Actuator::Actuator_Error_Type::COMMAND_SUCCESS)
+        return;
+
+    int real = actuator->realPosition_bytesToInt(response);
+    int indicated = actuator->indicatedPosition_bytesToInt(response);
+
+    QLabel *real_label = findChild<QLabel *>("real");
+    QLabel *indicated_label = findChild<QLabel *>("indicated");
+    real_label->setText(QString::fromStdString(std::to_string(real)));
+    indicated_label->setText(QString::fromStdString(std::to_string(indicated)));
 }

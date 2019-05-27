@@ -34,6 +34,10 @@ private slots:
 
     void on_init_clicked();
 
+    void on_button_write_2_clicked();
+
+    void on_get_pos_clicked();
+
 private:
     Ui::MainWindow *ui;
     ThkActuator *actuator;
