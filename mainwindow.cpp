@@ -133,6 +133,10 @@ void MainWindow::on_get_pos_clicked()
 
     int real = actuator->realPosition_bytesToInt(response);
     int indicated = actuator->indicatedPosition_bytesToInt(response);
+    if(currentAxis == Actuator::ACTUATOR_AXIS_Y){
+        real = -real;
+        indicated = -indicated;
+    }
 
     QLabel *real_label = findChild<QLabel *>("real");
     QLabel *indicated_label = findChild<QLabel *>("indicated");
